@@ -24,7 +24,7 @@ import org.artifactory.security.groups.LdapGroupsSettings
  */
 
 realms {
-    myrealm([autoCreateUsers: false, realmPolicy: RealmPolicy.SUFFICIENT]) {
+    myrealm([autoCreateUsers: false, realmPolicy: RealmPolicy.ADDITIVE]) {
         authenticate { username, credentials ->
             def settings = new LdapGroupsSettings()
             // 'il-users' is an existing Ldap Group Setting Name in Artifactory
@@ -32,6 +32,7 @@ realms {
             settings.ldapGroupSettingsName = 'il-users'
             groups += security.getCurrentUserGroupNames(settings)
             return true
+            log.debug "user " + username+" have the following groups "+ groups
         }
     }
 }
